@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.zhaw.avalanger.model.Avalange;
+import ch.zhaw.avalanger.repository.AvalangeRepository;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/avalange")
+@RequiredArgsConstructor
 public class AvalangeController {
+private final AvalangeRepository avalangeRepository;
 
     @GetMapping({ "", "/{country}" })
     public String getAllAvelanges(@PathVariable(required = false) String country,
@@ -23,7 +27,8 @@ public class AvalangeController {
 
     @PostMapping
     public String createAvalange(@RequestBody Avalange avalange) {
-        return "Avalange created: " + avalange;
-
+        avalangeRepository.save(avalange);
+        return "Avalange created: " + avalange.getCountry() + ", " + avalange.getState() + ", "
+                + avalange.getDescription();
     }
 }
