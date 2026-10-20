@@ -8,6 +8,8 @@ import ch.zhaw.avalanger.model.Avalange;
 import ch.zhaw.avalanger.model.AvalangeCreateDTO;
 import ch.zhaw.avalanger.repository.AvalangeRepository;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,9 +26,9 @@ public class AvalangeController {
     }
 
     @GetMapping({ "", "/{country}" })
-    public String getAllAvelanges(@PathVariable(required = false) String country,
+    public ResponseEntity<List<Avalange>> getAllAvelanges(@PathVariable(required = false) String country,
             @RequestParam(required = false) String state) {
-        return "No avelanges found for country: " + country + ", state: " + state;
+        return ResponseEntity.ok(avalangeRepository.findAll());
     }
 
     @PostMapping
