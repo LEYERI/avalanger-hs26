@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ch.zhaw.avalanger.model.Avalange;
 import ch.zhaw.avalanger.model.AvalangeCreateDTO;
+import ch.zhaw.avalanger.model.AvalangeState;
 import ch.zhaw.avalanger.repository.AvalangeRepository;
 
 import java.util.List;
@@ -27,8 +28,16 @@ public class AvalangeController {
 
     @GetMapping({ "", "/{country}" })
     public ResponseEntity<List<Avalange>> getAllAvelanges(@PathVariable(required = false) String country,
-            @RequestParam(required = false) String state) {
-        return ResponseEntity.ok(avalangeRepository.findAll());
+            @RequestParam(required = false) AvalangeState state) {
+        if (country != null && state != null) {
+            return ResponseEntity.ok(avalangeRepository.findByCountryAndState(country, state.name()));
+        } else if (country != null) {
+            return ResponseEntity.ok(avalangeRepository.findByCountry(country));
+        } else if (state != null) {
+            return ResponseEntity.ok(avalangeRepository.findByState(state.name()));
+        } else {
+            return ResponseEntity.ok(avalangeRepository.findAll());
+        }
     }
 
     @PostMapping
