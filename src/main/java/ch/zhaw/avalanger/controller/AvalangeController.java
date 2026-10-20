@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.zhaw.avalanger.model.Avalange;
+import ch.zhaw.avalanger.model.AvalangeCreateDTO;
 import ch.zhaw.avalanger.repository.AvalangeRepository;
 
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,9 @@ public class AvalangeController {
     }
 
     @PostMapping
-    public ResponseEntity<Avalange> createAvalange(@RequestBody Avalange avalange) {
-        Avalange savedAvalange = avalangeRepository.save(avalange);
+    public ResponseEntity<Avalange> createAvalange(@RequestBody AvalangeCreateDTO avalange) {
+        Avalange avalangeToSave = new Avalange(avalange.getCountry(), avalange.getDescription());
+        Avalange savedAvalange = avalangeRepository.save(avalangeToSave);
         return ResponseEntity.ok(savedAvalange);
     }
 }
